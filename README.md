@@ -3,6 +3,8 @@
 ## Advancements in Agriculture: Multimodal Deep Learning for Enhanced Plant Identification
 #### Developing a Multi-organ Plant Classifier Using Multimodal Fusion Architecture Search
 
+##### Please also check our sample iOS app that utilizes the proposed model: https://github.com/AlfredsLapkovskis/MultimodalPlantClassifier-iOS
+
 # 1. Setup
 
 We used Python 3.11.5.
