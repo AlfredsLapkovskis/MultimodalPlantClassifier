@@ -1,0 +1,520 @@
+==================================UNIMODAL MODELS==================================
+
+
+
+
+Flower==================================
+
+precision_micro=0.6411217548243787
+precision_macro=0.6243615519393784
+recall_micro=0.6411217548243787
+recall_macro=0.5574258460772954
+f1_micro=0.6411217548243787
+f1_macro=0.5671302041240868
+accuracy=0.6411217548243787
+top_5_accuracy=0.8281271692350409
+top_10_accuracy=0.8843537414965986
+
+
+
+Fruit==================================
+
+precision_micro=0.6758760107816711
+precision_macro=0.6882798384442369
+recall_micro=0.6758760107816711
+recall_macro=0.6247550879263096
+f1_micro=0.6758760107816711
+f1_macro=0.6275990676248444
+accuracy=0.6758760107816711
+top_5_accuracy=0.8416442048517521
+top_10_accuracy=0.889487870619946
+
+
+
+Leaf==================================
+
+precision_micro=0.5147319843805467
+precision_macro=0.45317563406988814
+recall_micro=0.5147319843805467
+recall_macro=0.3814969590135865
+f1_micro=0.5147319843805467
+f1_macro=0.3915837870232417
+accuracy=0.5147319843805467
+top_5_accuracy=0.7177848775292864
+top_10_accuracy=0.7862974795882144
+
+
+Stem==================================
+
+precision_micro=0.47835497835497837
+precision_macro=0.4183736695276349
+recall_micro=0.47835497835497837
+recall_macro=0.3887526014488831
+f1_micro=0.47835497835497837
+f1_macro=0.38138555383888184
+accuracy=0.47835497835497837
+top_5_accuracy=0.7012987012987013
+top_10_accuracy=0.7748917748917749
+
+
+Late fusion==================================
+
+precision_micro=0.7240853658536586
+precision_macro=0.7220328058086272
+recall_micro=0.7240853658536586
+recall_macro=0.6408331759799458
+f1_micro=0.7240853658536586
+f1_macro=0.6528906841459088
+accuracy=0.7240853658536586
+top_5_accuracy=0.8890712945590994
+top_10_accuracy=0.9292917448405253
+
+
+
+
+==================================MULTIMODAL MODELS==================================
+
+
+
+
+Final model (no fine-tuning)==================
+
+precision_micro=0.8116791744840526
+precision_macro=0.7843948093885534
+recall_micro=0.8116791744840526
+recall_macro=0.7523648235496213
+f1_micro=0.8116791744840526
+f1_macro=0.7516325400832284
+accuracy=0.8116791744840526
+top_5_accuracy=0.9324577861163227
+top_10_accuracy=0.9543855534709194
+
+
+
+Final model (with fine-tuning)=================
+
+precision_micro=0.8347795497185742
+precision_macro=0.8074291127113989
+recall_micro=0.8347795497185742
+recall_macro=0.7739066218082695
+f1_micro=0.8347795497185742
+f1_macro=0.7751302263976763
+accuracy=0.8347795497185742
+top_5_accuracy=0.9418386491557224
+top_10_accuracy=0.9603658536585366
+
+
+
+McNemar's test (no fine-tuning)==================
+
+[[1322  284]
+ [1031 5891]]
+pvalue      4.893397361495168e-94
+statistic   423.2060836501901
+
+
+
+McNemar's test (with fine-tuning)================
+
+[[1161  248]
+ [1192 5927]]
+pvalue      2.5709808486265195e-136
+statistic   617.5340277777777
+
+
+
+
+==================================SUBSETS OF MODALITIES==================================
+
+
+
+
+COMBINATION: {'Flower'}===================
+
+Late fusion scores:
+
+precision_micro=0.6378851274248764
+precision_macro=0.6187723383497072
+recall_micro=0.6378851274248764
+recall_macro=0.5579983265549953
+f1_micro=0.6378851274248764
+f1_macro=0.5638176181295144
+accuracy=0.6378851274248764
+top_5_accuracy=0.8222391276784582
+top_10_accuracy=0.8813236972232789
+
+Final model scores:
+
+precision_micro=0.5261823253455052
+precision_macro=0.5218124658997644
+recall_micro=0.5261823253455052
+recall_macro=0.5129599594357728
+f1_micro=0.5261823253455052
+f1_macro=0.46468375070619944
+accuracy=0.5261823253455052
+top_5_accuracy=0.7641688855077976
+top_10_accuracy=0.8475973120324585
+
+
+
+COMBINATION: {'Leaf'}===================
+
+Late fusion scores:
+
+precision_micro=0.42473338802296967
+precision_macro=0.43400024445800306
+recall_micro=0.42473338802296967
+recall_macro=0.3846096245370395
+f1_micro=0.42473338802296967
+f1_macro=0.3755057066778469
+accuracy=0.42473338802296967
+top_5_accuracy=0.6421246923707957
+top_10_accuracy=0.7182116488925349
+
+Final model scores:
+
+precision_micro=0.2674323215750615
+precision_macro=0.2652549083004592
+recall_micro=0.2674323215750615
+recall_macro=0.2654836833729485
+f1_micro=0.2674323215750615
+f1_macro=0.20940151323304457
+accuracy=0.2674323215750615
+top_5_accuracy=0.4913863822805578
+top_10_accuracy=0.6101312551271534
+
+
+
+COMBINATION: {'Fruit'}===================
+
+Late fusion scores:
+
+precision_micro=0.6447619047619048
+precision_macro=0.6765287627714117
+recall_micro=0.6447619047619048
+recall_macro=0.6275076204649224
+f1_micro=0.6447619047619048
+f1_macro=0.6158475498737225
+accuracy=0.6447619047619048
+top_5_accuracy=0.813015873015873
+top_10_accuracy=0.8711111111111111
+
+Final model scores:
+
+precision_micro=0.47015873015873016
+precision_macro=0.4828940535769238
+recall_micro=0.47015873015873016
+recall_macro=0.48314560341125534
+f1_micro=0.47015873015873016
+f1_macro=0.41657991458827426
+accuracy=0.47015873015873016
+top_5_accuracy=0.7380952380952381
+top_10_accuracy=0.8266666666666667
+
+
+
+COMBINATION: {'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.42237555446032526
+precision_macro=0.40311014027730385
+recall_micro=0.42237555446032526
+recall_macro=0.38707671412270317
+f1_micro=0.42237555446032526
+f1_macro=0.36222110321889145
+accuracy=0.42237555446032526
+top_5_accuracy=0.6466239526860522
+top_10_accuracy=0.7225234105470675
+
+Final model scores:
+
+precision_micro=0.3016264169541646
+precision_macro=0.3067068041359064
+recall_micro=0.3016264169541646
+recall_macro=0.2776592339744095
+f1_micro=0.3016264169541646
+f1_macro=0.2278506631046507
+accuracy=0.3016264169541646
+top_5_accuracy=0.5248891079349434
+top_10_accuracy=0.6589452932479054
+
+
+
+COMBINATION: {'Flower', 'Leaf'}===================
+
+Late fusion scores:
+
+precision_micro=0.7315716272600834
+precision_macro=0.5764981297123444
+recall_micro=0.7315716272600834
+recall_macro=0.48870799892164485
+f1_micro=0.7315716272600834
+f1_macro=0.5102338907784614
+accuracy=0.7315716272600834
+top_5_accuracy=0.9058878071395456
+top_10_accuracy=0.9450625869262865
+
+Final model scores:
+
+precision_micro=0.7955493741307371
+precision_macro=0.6541398162809371
+recall_micro=0.7955493741307371
+recall_macro=0.6323005554316224
+f1_micro=0.7955493741307371
+f1_macro=0.6236347964261403
+accuracy=0.7955493741307371
+top_5_accuracy=0.9364858599907279
+top_10_accuracy=0.9622160407974037
+
+
+
+COMBINATION: {'Flower', 'Fruit'}===================
+
+Late fusion scores:
+
+precision_micro=0.8229734641948382
+precision_macro=0.6418501535465505
+recall_micro=0.8229734641948382
+recall_macro=0.5719565791854657
+f1_micro=0.8229734641948382
+f1_macro=0.5907177350757526
+accuracy=0.8229734641948382
+top_5_accuracy=0.9447473645946929
+top_10_accuracy=0.9756452199200291
+
+Final model scores:
+
+precision_micro=0.831697564521992
+precision_macro=0.6543599682241811
+recall_micro=0.831697564521992
+recall_macro=0.620620652709424
+f1_micro=0.831697564521992
+f1_macro=0.6232626263569147
+accuracy=0.831697564521992
+top_5_accuracy=0.9472918938567794
+top_10_accuracy=0.9716466739367503
+
+
+
+COMBINATION: {'Flower', 'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.7379227053140096
+precision_macro=0.486231793961622
+recall_micro=0.7379227053140096
+recall_macro=0.4215677824189109
+f1_micro=0.7379227053140096
+f1_macro=0.4361106445896706
+accuracy=0.7379227053140096
+top_5_accuracy=0.9039855072463768
+top_10_accuracy=0.9396135265700483
+
+Final model scores:
+
+precision_micro=0.7415458937198067
+precision_macro=0.5004422473575465
+recall_micro=0.7415458937198067
+recall_macro=0.4532342470991149
+f1_micro=0.7415458937198067
+f1_macro=0.45622132123826337
+accuracy=0.7415458937198067
+top_5_accuracy=0.9094202898550725
+top_10_accuracy=0.9498792270531401
+
+
+
+COMBINATION: {'Leaf', 'Fruit'}===================
+
+Late fusion scores:
+
+precision_micro=0.7451437451437452
+precision_macro=0.6401935185163276
+recall_micro=0.7451437451437452
+recall_macro=0.568757707109455
+f1_micro=0.7451437451437452
+f1_macro=0.581803226301932
+accuracy=0.7451437451437452
+top_5_accuracy=0.9075369075369075
+top_10_accuracy=0.9491064491064491
+
+Final model scores:
+
+precision_micro=0.7641802641802642
+precision_macro=0.655677009488935
+recall_micro=0.7641802641802642
+recall_macro=0.6119390362576977
+f1_micro=0.7641802641802642
+f1_macro=0.6097043254840054
+accuracy=0.7641802641802642
+top_5_accuracy=0.9188034188034188
+top_10_accuracy=0.9498834498834499
+
+
+
+COMBINATION: {'Leaf', 'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.6639839034205232
+precision_macro=0.5186864455934318
+recall_micro=0.6639839034205232
+recall_macro=0.4481521742028434
+f1_micro=0.6639839034205232
+f1_macro=0.46029052077486904
+accuracy=0.6639839034205232
+top_5_accuracy=0.8722334004024145
+top_10_accuracy=0.9270623742454729
+
+Final model scores:
+
+precision_micro=0.6458752515090543
+precision_macro=0.5873369703540561
+recall_micro=0.6458752515090543
+recall_macro=0.5569168008249098
+f1_micro=0.6458752515090543
+f1_macro=0.5355939717825585
+accuracy=0.6458752515090543
+top_5_accuracy=0.857645875251509
+top_10_accuracy=0.9129778672032193
+
+
+
+COMBINATION: {'Fruit', 'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.7184350918790753
+precision_macro=0.5889635774716765
+recall_micro=0.7184350918790753
+recall_macro=0.5292195694127011
+f1_micro=0.7184350918790753
+f1_macro=0.5382331186757072
+accuracy=0.7184350918790753
+top_5_accuracy=0.8938944872554832
+top_10_accuracy=0.9377593360995851
+
+Final model scores:
+
+precision_micro=0.7184350918790753
+precision_macro=0.6598499782388665
+recall_micro=0.7184350918790753
+recall_macro=0.6269286761071297
+f1_micro=0.7184350918790753
+f1_macro=0.6141577155852115
+accuracy=0.7184350918790753
+top_5_accuracy=0.8938944872554832
+top_10_accuracy=0.943094250148192
+
+
+
+COMBINATION: {'Flower', 'Fruit', 'Leaf'}===================
+
+Late fusion scores:
+
+precision_micro=0.8578431372549019
+precision_macro=0.6450078230150097
+recall_micro=0.8578431372549019
+recall_macro=0.5784512188651011
+f1_micro=0.8578431372549019
+f1_macro=0.5985486331578345
+accuracy=0.8578431372549019
+top_5_accuracy=0.9714795008912656
+top_10_accuracy=0.9879679144385026
+
+Final model scores:
+
+precision_micro=0.9233511586452763
+precision_macro=0.7951323087235613
+recall_micro=0.9233511586452763
+recall_macro=0.7767987335367044
+f1_micro=0.9233511586452763
+f1_macro=0.7815932553387941
+accuracy=0.9233511586452763
+top_5_accuracy=0.9857397504456328
+top_10_accuracy=0.9915329768270945
+
+
+
+COMBINATION: {'Flower', 'Stem', 'Leaf'}===================
+
+Late fusion scores:
+
+precision_micro=0.8282766990291263
+precision_macro=0.582148569511979
+recall_micro=0.8282766990291263
+recall_macro=0.5053354725472834
+f1_micro=0.8282766990291263
+f1_macro=0.5261322872708423
+accuracy=0.8282766990291263
+top_5_accuracy=0.9611650485436893
+top_10_accuracy=0.9842233009708737
+
+Final model scores:
+
+precision_micro=0.8901699029126213
+precision_macro=0.7574149284869673
+recall_micro=0.8901699029126213
+recall_macro=0.725330545126499
+f1_micro=0.8901699029126213
+f1_macro=0.7332120856624834
+accuracy=0.8901699029126213
+top_5_accuracy=0.9787621359223301
+top_10_accuracy=0.9902912621359223
+
+
+
+COMBINATION: {'Flower', 'Fruit', 'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.8449275362318841
+precision_macro=0.5838499431956946
+recall_micro=0.8449275362318841
+recall_macro=0.525764421252867
+f1_micro=0.8449275362318841
+f1_macro=0.5416031746597046
+accuracy=0.8449275362318841
+top_5_accuracy=0.9681159420289855
+top_10_accuracy=0.986231884057971
+
+Final model scores:
+
+precision_micro=0.8833333333333333
+precision_macro=0.6333938759337165
+recall_micro=0.8833333333333333
+recall_macro=0.5962996950010181
+f1_micro=0.8833333333333333
+f1_macro=0.607939227013378
+accuracy=0.8833333333333333
+top_5_accuracy=0.9753623188405797
+top_10_accuracy=0.9855072463768116
+
+
+
+COMBINATION: {'Leaf', 'Fruit', 'Stem'}===================
+
+Late fusion scores:
+
+precision_micro=0.8179086538461539
+precision_macro=0.6649621538473403
+recall_micro=0.8179086538461539
+recall_macro=0.5954674848820622
+f1_micro=0.8179086538461539
+f1_macro=0.6142526812577253
+accuracy=0.8179086538461539
+top_5_accuracy=0.9585336538461539
+top_10_accuracy=0.9837740384615384
+
+Final model scores:
+
+precision_micro=0.8617788461538461
+precision_macro=0.7919329240717757
+recall_micro=0.8617788461538461
+recall_macro=0.7643731216870869
+f1_micro=0.8617788461538461
+f1_macro=0.7637650310026983
+accuracy=0.8617788461538461
+top_5_accuracy=0.9699519230769231
+top_10_accuracy=0.9879807692307693

@@ -1,0 +1,8 @@
+{
+    "cache_dir": "cache",
+    "plant_net_root": "COPY THIS CONFIG WITH NAME 'config.json' AND FILL PATHS TO DATASETS HERE",
+    "plant_clef_root": "/somedir/anotherdir/plantclefdir",
+    "plant_clef_train": "RELATIVE TO plant_clef_root",
+    "plant_clef_test": "RELATIVE TO plant_clef_root",
+    "working_dir": "artefacts"
+}

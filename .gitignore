@@ -1,0 +1,5 @@
+cache
+images
+venv
+config.json
+__pycache__

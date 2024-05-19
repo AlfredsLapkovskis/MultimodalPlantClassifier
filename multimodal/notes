@@ -1,0 +1,107 @@
+HERE WE ASSUME THAT WE HAVE JUST 2 MODALITIES
+
+
+Dataset is (x, y; z) where x, y – modalities and z – labels
+
+There exist 2 functions – f(x) and g(y), which output:
+
+z_x_hat = f(x)
+z_y_hat = g(y)
+
+which estimate z
+
+f and g are composed of M and N layers, respectively
+subfunctions – f_l and g_l.
+
+For layer l:
+x_l = (f_l o f_{l-1} o ... o f_1)(x),
+y_l = (g_l o g_{l-1} o ... o g_1)(y).
+
+Subfunctions are convolutions, pooling, multiplication by matrix, non-linearity, etc.
+Their outputs are features we want to fuse across modalities.
+The problem is which to choose and how to mix them.
+
+
+===================================== SEARCH SPACE =====================================
+
+
+Fusion is introduced through a third NN.
+Each fusion layer l combines 3 inputs:
+- output of the previous fusion layer
+- 1 output from each modality
+
+h_l = sigma_{gamma^p_l}(W_l @ [x_{gamma^m_l} y_{gamma^n_l} h_l-1]^T)
+
+where gamma_l = (gamma^m_l, gamma^n_l, gamma^p_l) is a triplet of variable indices, 
+which establishes which feature from the 1st, 2nd modalities and what non-linearity (i.e, ReLU, Sigmoid, etc.) is applied.
+
+gamma^m_l \in {1, ..., M}, 
+gamma^n_l \in {1, ..., N}, and 
+gamma^p_l \in {1, ..., P}.
+
+The number of possible fusion layers, a search parameter, is denoted by L, so that
+l \in {1, ..., L}
+
+Fusion layer weight matrix W_l is trainable.
+
+Feature concatenation is a fixed strategy to fuse features.
+
+A composed fusion scheme is defined by a vector of triples:
+[gamma_l]_l \in {1, ..., L}.
+
+Set of all possible triples with L layers: Gamma_L.
+
+Size of search space: (M x N x P)^L.
+This is the reason to focus on sampling-efficient exploration method – sequential model-based optimization (SMBO).
+
+SMBO sequentially unfolds the complexity of the sampled architectures starting from the simplest one.
+In MFAS – L is a hook for progression.
+
+
+===================================== SEARCH ALGORITHM =====================================
+
+
+In SMBO a surrogate model predicts accuracy of sampled architectures. 
+It is trained during progressive exploration, and is used to reduce amount of NN to train and evaluate.
+
+In MFAS, having variable length description of architectures:
+[gamma_l]_l \in {1, ..., L}, naturally results in using a recurrent model (denoted by PI) as surrogate.
+
+
+Params of PI are updated at iteration l by SGD training on subset of Gamma_l with real-valued accuracies A_l.
+
+
+
+
+
+
+### ALGO HERE
+
+
+
+
+
+### Check training surrogate model (SMBO)
+### Check temperature based sampling (EPNAS)
+### [maybe not needed ===] Check ENAS for training for only a few epochs
+
+FINAL ARCHITECTURE.
+- Final architecture is selected from the K best architectures trained to completion based on its validation accuracy.
+- Also evaluate the performance of the chosen architectures with larger matrices W_l.
+
+LOSS FUNCTION.
+- During the search, f and g are frozen, therefore, only the fusion softmax z_{x,y}_hat is used for the loss function.
+- Found architectures are initially trained for a few epochs with frozen f and g.
+- A 2nd training step with more epochs involves a multitask loss on z_x_hat, z_y_hat, z_{x,y}_hat,
+and unfrozen f and g.
+- Categorical crossentropy loss is used in all experiments.
+
+HANDLING ARBITRARY TENSOR DIMENSIONS
+- Subfunctions may deliver tensors with arbitrary dimensions. Use global pooling along the channel dimension of 2nd
+and 3D convolutions. Leave linear layer outputs as they are.
+
+WEIGHT SHARING OF FUSION LAYERS.
+- networks are trained sequentially for a small number of epochs (2 in all their experiments)
+- for 2 sample indices s' and s, where s' > s, keep track of weight matrix W^s_l for layer l,
+so W^s'_l is initialized from W^s_l if they have the same size.
+- weights are only shared among matrices in the same layer l.
