@@ -37,11 +37,6 @@ def main(configuration):
         y_true = tf.one_hot(tf.cast(y_true, tf.int32), N_CLASSES)
         return keras.losses.categorical_crossentropy(y_true, y_pred, label_smoothing=0.02)
 
-    """
-    Total params: 6,183,548 (23.59 MB)
-    Trainable params: 2,481,596 (9.47 MB)
-    Non-trainable params: 3,701,952 (14.12 MB)
-    """
     model.compile(
         optimizer=keras.optimizers.Adam(
             learning_rate=keras.optimizers.schedules.ExponentialDecay(
@@ -55,40 +50,37 @@ def main(configuration):
         metrics=["accuracy"],
     )
 
-    weights_path = os.path.join(config.get_models_dir(), "final", f"mm_pre.weights.h5")
+    model_path = os.path.join(config.get_models_dir(), "final", f"mm_pre")
 
-    if os.path.exists(weights_path):
-        model.load_weights(weights_path)
-    else:
-        model.fit(
-            train_ds,
-            validation_data=valid_ds,
-            class_weight=get_class_weight(train_df, N_CLASSES),
-            verbose=1,
-            epochs=100,
-            callbacks=[
-                keras.callbacks.EarlyStopping(
-                    patience=10,
-                    restore_best_weights=True,
-                ),
-                keras.callbacks.TensorBoard(
-                    log_dir=os.path.join(config.get_log_dir(), "mm_final_fine_tuning", f"pre_fine_tuning"),
-                    histogram_freq=1,
-                ),
-                keras.callbacks.BackupAndRestore(
-                    backup_dir=os.path.join(config.get_checkpoint_dir(), "mm_final_pre"),
-                    delete_checkpoint=False,
-                ),
-            ],
-        )
+    model.fit(
+        train_ds,
+        validation_data=valid_ds,
+        class_weight=get_class_weight(train_df, N_CLASSES),
+        verbose=1,
+        epochs=100,
+        callbacks=[
+            keras.callbacks.EarlyStopping(
+                patience=10,
+                restore_best_weights=True,
+            ),
+            keras.callbacks.TensorBoard(
+                log_dir=os.path.join(config.get_log_dir(), "mm_final_fine_tuning", f"pre_fine_tuning"),
+                histogram_freq=1,
+            ),
+            keras.callbacks.BackupAndRestore(
+                backup_dir=os.path.join(config.get_checkpoint_dir(), "mm_final_pre"),
+                delete_checkpoint=False,
+            ),
+        ],
+    )
 
-        os.makedirs(os.path.dirname(weights_path), exist_ok=True)
-        model.save_weights(weights_path)
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    model.save(model_path)
 
     for layer in model.layers:
         layer.trainable = True
 
-    weights_path = os.path.join(config.get_models_dir(), "final", f"mm_final.weights.h5")
+    model_path = os.path.join(config.get_models_dir(), "final", f"mm_final")
 
     model.compile(
         optimizer=keras.optimizers.Adam(
@@ -125,8 +117,8 @@ def main(configuration):
         ],
     )
 
-    os.makedirs(os.path.dirname(weights_path), exist_ok=True)
-    model.save_weights(weights_path)
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    model.save(model_path)
     
 
 if __name__ == "__main__":
