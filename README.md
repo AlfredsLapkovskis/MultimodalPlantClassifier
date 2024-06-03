@@ -1,7 +1,6 @@
-# Source code for the master's thesis by Alfreds Lapkovskis & Natalia Nefedova (2024)
+# Source code for the paper by Alfreds Lapkovskis, Natalia Nefedova & Ali Beikmohammadi (2024)
 
-## Advancements in Agriculture: Multimodal Deep Learning for Enhanced Plant Identification
-#### Developing a Multi-organ Plant Classifier Using Multimodal Fusion Architecture Search
+## Automatic Fused Multimodal Deep Learning for Plant Identification
 
 ##### Please also check our sample iOS app that utilizes the proposed model: https://github.com/AlfredsLapkovskis/MultimodalPlantClassifier-iOS
 
