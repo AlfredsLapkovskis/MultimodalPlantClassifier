@@ -2,6 +2,8 @@
 
 ## Automatic Fused Multimodal Deep Learning for Plant Identification
 
+##### Preprint: https://arxiv.org/abs/2406.01455
+
 ##### Please also check our sample iOS app that utilizes the proposed model: https://github.com/AlfredsLapkovskis/MultimodalPlantClassifier-iOS
 
 # 1. Setup
