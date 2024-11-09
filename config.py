@@ -22,15 +22,19 @@ class Config:
     def get_trials_dir(self):
         return os.path.join(self.working_dir, "trials")
 
-    def get_plant_clef_fat_file_path(self):
-        return os.path.join(self.plant_clef_root, "plant_clef.fat")
+    def get_unimodal_file_path(self, split, modality):
+        return os.path.join(self.plant_clef_root, "unimodal", split, f"{modality}.tfrecords")
     
-    def get_unimodal_csv_file_path(self, split, modality):
-        return os.path.join(self.plant_clef_root, "unimodal", split, f"{modality}.csv")
+    def get_multimodal_file_path(self, split):
+        return os.path.join(self.plant_clef_root, "multimodal", split, "data.tfrecords")
     
-    def get_multimodal_csv_file_path(self, split):
-        return os.path.join(self.plant_clef_root, "multimodal", split, "data.csv")
+    def get_unimodal_labels_file_path(self, split, modality):
+        return os.path.join(self.plant_clef_root, "unimodal", split, f"{modality}.txt")
+    
+    def get_multimodal_labels_file_path(self, split):
+        return os.path.join(self.plant_clef_root, "multimodal", split, "data.txt")
 
+    
     def __init__(self, path):
         with open(path) as f:
             config = json.loads(f.read())

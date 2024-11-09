@@ -27,7 +27,3 @@ class InvExpTemperatureScheduler(TemperatureScheduler):
 
     def update(self, iteration):
         self.temperature = (self.max_temperature - self.min_temperature) * np.exp(-((iteration + 1.) / self.decay_rate) ** 2) + self.min_temperature
-
-    
-    def __str__(self) -> str:
-        return f"{type(self).__name__}(max_temperature={self.max_temperature}, min_temperature={self.min_temperature}, decay_rate={self.decay_rate}, temperature={self.temperature})"

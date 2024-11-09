@@ -3,8 +3,6 @@ import keras
 import tensorflow as tf
 from abc import ABC, abstractmethod
 
-from common.constants import IMAGE_SHAPE
-
 
 class Model(ABC):
     @abstractmethod
@@ -12,16 +10,24 @@ class Model(ABC):
         pass
 
 
-class UnimodalModel(Model):
-
+class KerasModel(Model):
     def __init__(self, path):
-        self._model = keras.saving.load_model(path)
-        self._model.summary()
-        self._model.compile()
+        self._model = keras.saving.load_model(path, custom_objects={
+            "loss": None,
+        })
 
     def predict(self, dataset):
         return self._model.predict(dataset)
-    
+
+
+
+class UnimodalModel(KerasModel):
+    pass
+
+
+class MultimodalModel(KerasModel):
+    pass
+
 
 class LateFusionModel(Model):
 
@@ -29,7 +35,10 @@ class LateFusionModel(Model):
         assert len(modalities) > 0
         assert len(modalities) == len(paths)
 
-        self._models = {m: keras.saving.load_model(p) for m, p in zip(modalities, paths)}
+        self._models = {
+            m: UnimodalModel(p)
+            for m, p in zip(modalities, paths)
+        }
 
     def predict(self, dataset: tf.data.Dataset):
         predictions = {}
@@ -48,17 +57,3 @@ class LateFusionModel(Model):
             averaged_predictions.append(np.mean(pred, axis=0) if len(pred) > 0 else 0)
 
         return averaged_predictions
-    
-
-class MultimodalModel(Model):
-    
-    def __init__(self, path):
-        self._model = tf.saved_model.load(path).signatures["serving_default"]
-
-    def predict(self, dataset):
-        y_pred_proba = []
-        for i, batch in enumerate(dataset):
-            y_pred_proba.extend(self._model(**batch[0])["classifier"])
-            print(f"\rFinished batch {i + 1}", end="")
-        print()
-        return np.array(y_pred_proba)

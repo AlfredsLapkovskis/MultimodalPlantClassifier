@@ -1,5 +1,7 @@
+artefacts
 cache
 images
 venv
+env
 config.json
 __pycache__

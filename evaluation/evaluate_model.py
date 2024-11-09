@@ -1,15 +1,14 @@
 import argparse
-import pandas as pd
 
 from config import Config
-from dataset.loading import load_unimodal_dataset, load_multimodal_dataset
+from dataset.loading import *
 from .utils.model_wrappers import *
-from .utils.print_metrics import *
+from .utils.printing import *
 
 
-def main(model, test_ds, test_df):
+def run(model, test_ds, test_labels):
     y_pred_proba = model.predict(test_ds)
-    y_true = test_df["Label"]
+    y_true = test_labels
 
     print_metrics(y_true, y_pred_proba)
 
@@ -63,21 +62,21 @@ if __name__ == "__main__":
             assert modality and path
 
             model = UnimodalModel(path)
-            test_df = pd.read_csv(config.get_unimodal_csv_file_path("test", modality))
-            test_ds = load_unimodal_dataset(config, modality, "test", df=test_df, batch_size=128)
+            test_ds = load_unimodal_dataset(config, modality, "test", batch_size=256)
+            test_labels = load_unimodal_labels(config, modality, "test")
         case "multimodal":
             assert modalities and path
 
             model = MultimodalModel(path)
-            test_df = pd.read_csv(config.get_multimodal_csv_file_path("test"))
-            test_ds = load_multimodal_dataset(config, "test", modalities, [], batch_size=128, df=test_df)
+            test_ds = load_multimodal_dataset(config, "test", modalities, [], batch_size=256)
+            test_labels = load_multimodal_labels(config, "test")
         case "late_fusion":
             assert modalities and paths
 
             model = LateFusionModel(modalities, paths)
-            test_df = pd.read_csv(config.get_multimodal_csv_file_path("test"))
-            test_ds = load_multimodal_dataset(config, "test", modalities, [], batch_size=128, df=test_df)
+            test_ds = load_multimodal_dataset(config, "test", modalities, [], batch_size=256)
+            test_labels = load_multimodal_labels(config, "test")
         case _:
             raise ValueError("Invalid mode")
 
-    main(model, test_ds, test_df)
+    run(model, test_ds, test_labels)

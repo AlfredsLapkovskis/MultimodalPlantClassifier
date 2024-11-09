@@ -1,0 +1,14 @@
+{
+    "model_paths": {
+        "Flower": "resources/models/train/Flower_fine_tuned.keras",
+        "Leaf": "resources/models/train/Leaf_fine_tuned.keras",
+        "Fruit": "resources/models/train/Fruit_fine_tuned.keras",
+        "Stem": "resources/models/train/Stem.keras"
+    },
+    "configuration": [[221, 20, 221, -1, 2000000], [-1, -1, 107, 4, 1000000], [-1, 221, 107, 221, 1000000], [229, 229, -1, 20, 1000000]],
+    "fusion_neurons": [512, 512, 512, 512],
+    "lr": 5e-4,
+    "decay": 0.9,
+    "dropouts": [0.0, 0.0, 0.0, 0.4, 0.4],
+    "cache_batches": true
+}

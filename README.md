@@ -1,10 +1,10 @@
-# Source code for the paper by Alfreds Lapkovskis, Natalia Nefedova & Ali Beikmohammadi (2024)
+# Source code for the paper "Automatic Fused Multimodal Deep Learning for Plant Identification"
 
-## Automatic Fused Multimodal Deep Learning for Plant Identification
+## Alfreds Lapkovskis, Natalia Nefedova & Ali Beikmohammadi (2024)
 
 ##### Preprint: https://arxiv.org/abs/2406.01455
 
-##### Please also check our sample iOS app that utilizes the proposed model: https://github.com/AlfredsLapkovskis/MultimodalPlantClassifier-iOS
+##### Please also check our sample iOS app that utilizes the proposed model (uses an older version of our model): https://github.com/AlfredsLapkovskis/MultimodalPlantClassifier-iOS
 
 # 1. Setup
 
@@ -13,13 +13,29 @@ We used Python 3.11.5.
 ## 1.1. Configure a Virtual Environment
 
 Execute these commands from the project root directory:
+
+**Windows**:
+```batch
+python -m venv env
+env/bin/activate
+pip install -r requirements.txt
+```
+
+**Linux**:
+```bash
+python -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+
+**MacOS:**
 ```zsh
 python -m venv env
-
-# This is for macOS. Please google how to activate venv for your OS.
 source env/bin/activate
-
 pip install -r requirements.txt
+
+# Optional step to accelerate training on MacOS (https://developer.apple.com/metal/tensorflow-plugin/)
+pip install -r requirements_macos.txt
 ```
 
 ## 1.2. Download PlantCLEF2015 Dataset
@@ -32,7 +48,7 @@ If you want to run dataset/stats.ipynb, you may want to download Pl@ntNet too (h
 
 ## 1.4. Create Config
 
-Copy example_config.json into the project root directory. Name it as config.json.
+Copy example_config.json into the project root directory. Name it as **config.json**.
 
 Specify there:
 
@@ -53,27 +69,25 @@ Specify there:
     - **plant_clef_meta.py** a model of PlantCLEF2015 metadata.
     - **data_loading_demo.ipynb** demonstration of using **loading.py**.
 - **unimodal** directory contains everything related to our unimodal models:
-    - **pretrain_modalities.py** a script to train and save weights of our unimodal models.
-    - **weights_to_models.py** a script to convert weights of our unimodal models into keras models.
-    - **__some_experiments** contains some of our experiments with unimodal models. Note that we included only a part of experiments, since others were messy :) Also, there may be some bugs in these versions of experiments.
+    - **experiment.py** a class containing hyperparameters and settings for unimodal model training.
+    - **experiments** a directory containing JSON files with experiment hyperparameters and settings. These files are parsed by **experiment.py** and must be named as **exp<i>\<index></i>.json**.
+    - **train.py** a script to train our unimodal models. Usage: <code>python -m unimodal.train -e \<index of experiment></code>. Optionally, add <code>-s \<save mode></code> to save the trained models. For available save mode options, see: **common/save_mode.py**.
 - **multimodal** directory contains everything related to our multimodal model:
-    - **mfas.py** contains our implementation of MFAS algorithm based on the original paper [(Perez-Rua et al., 2019)](https://www.researchgate.net/publication/338510163_MFAS_Multimodal_Fusion_Architecture_Search) and the author's [source code](https://github.com/jperezrua/mfas).
-    - **final_model_fine_tuning.py** a script for training, fine-tuning and saving our final model.
-    - **__some_experiments** contains some of our experiments with architectures found by MFAS. Note that we included only a part of experiments, since others were messy :) Also, there may be some bugs in these versions of experiments.
-    - **classes** contains all the classes used in our MFAS implementation and in final model training, and in our experiments.
+    - **run_mfas.py** a script to run our implementation of MFAS algorithm based on the original paper [(Perez-Rua et al., 2019)](https://www.researchgate.net/publication/338510163_MFAS_Multimodal_Fusion_Architecture_Search) and the author's [source code](https://github.com/jperezrua/mfas).
+    - **experiment.py** a class containing hyperparameters and settings for multimodal model training. We use it once we have found optimal configurations by **run_mfas.py**.
+    - **experiments** a directory containing JSON files with experiment hyperparameters and settings. These files are parsed by **experiment.py** and must be named as **exp<i>\<index></i>.json**. We use it once we have found optimal configurations by **run_mfas.py**.
+    - **train.py** a script to train our multimodal model. We use it once we have found an optimal configuration by **run_mfas**. Usage: <code>python -m unimodal.train -e \<index of experiment></code>. Optionally, add <code>-s \<save mode></code> to save the trained models. For available save mode options, see: **common/save_mode.py**.
+    - **classes** contains all the classes used in our MFAS implementation (including **mfas.py**, the algorithm itself) and multimodal experiments.
 - **evaluation** contains the code used for model evaluation:
     - **evaluate_model.py** basic evaluation of unimodal models, our multimodal model or our baseline.
     - **mcnemar_test.py** McNemar's test to detect the statistical significance of difference between the proposed model and the baseline.
-    - **missing_modalities.py** script to compare the final model with unimodal models and the baseline on subsets of modalities.
-    - **evaluation_results** actual metrics of all our models.
+    - **subsets_of_modalities.py** script to compare the final model with unimodal models and the baseline on subsets of modalities.
     - **utils** various utilities for the evaluation.
 - **common** various helpers and constants used in the project.
 - **convert** utilities to convert models to other formats:
     - **convert_to_coreml.py** script to covert models to Apple CoreML format.
 - **resources** various resources produced by our code:
-    - **plant_clef_meta.json** metadata cached by **preprocessing.py** which we used in generation of our csv files – references to actual images.
-    - **csv** references to actual images with class labels, used during model training, validation and evaluation.
-    - **model** our trained models.
+    - **models** our trained models. **train** directory contains models trained on training set only, whereas **train+validation** contains models trained on merged training and validation sets.
 
 # 3. Execute Code
 

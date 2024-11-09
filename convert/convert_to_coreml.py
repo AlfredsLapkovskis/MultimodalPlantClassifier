@@ -1,12 +1,15 @@
 import argparse
 import os
 import coremltools as ct
+import keras
 
 
-def main(src, dst):
+def run(src, dst):
     path = os.path.expanduser(src)
 
-    coreml =  ct.convert(path)
+    model = keras.saving.load_model(path, custom_objects={"loss": None})
+
+    coreml = ct.convert(model, source="tensorflow")
     coreml.save(os.path.join(dst, "coreml.mlpackage"))
 
 
@@ -27,4 +30,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(args.src, args.dst)
+    run(args.src, args.dst)

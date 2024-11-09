@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 import keras
 
-from common.constants import IMAGE_SHAPE
-
 
 class Unimodal(ABC):
     @abstractmethod
@@ -15,18 +13,19 @@ class Unimodal(ABC):
     def get_fusable_layer_indices(self, fusion_idx) -> list[int]:
         pass
     @abstractmethod
-    def get_layer(self, model, idx) -> keras.Layer:
+    def get_layer(self, model, idx) -> keras.layers.Layer:
         pass
 
 
 class PlantUnimodal(Unimodal):
     
     _INPUT_LAYER_IDX = 0
-    _OUTPUT_LAYER_IDX = 156
+    _OUTPUT_LAYER_IDX = -1
 
 
-    def __init__(self, modality):
+    def __init__(self, modality, model_path):
         self.modality = modality
+        self.model_path = model_path
 
 
     def get_modality_name(self) -> str:
@@ -34,39 +33,34 @@ class PlantUnimodal(Unimodal):
 
 
     def build_model(self) -> keras.Model:
-        input = keras.Input(IMAGE_SHAPE, name=self.modality)
+        custom_objects = {"loss": None}
 
-        model = keras.applications.MobileNetV3Small(
-            input_shape=IMAGE_SHAPE,
-            input_tensor=input,
-            include_preprocessing=False,
-            include_top=False,
-            pooling="avg",
-        )
+        model = keras.models.load_model(self.model_path, custom_objects=custom_objects)
+        
+        # Unique names are necessary for fusion; unfortunately, public property .name is readonly.
+        model.layers[0]._name = self.modality
+        for layer in model.layers[1:]:
+            layer._name = f"{self.modality}_{layer.name}"
 
         model.trainable = False
         model.compile()
-
-        model.layers[0].name = self.modality
-        for layer in model.layers[1:]:
-            layer.name = f"{self.modality}_{layer.name}"
 
         return model
 
 
     def get_fusable_layer_indices(self, fusion_idx) -> list[int]:
         """
-        15   <BatchNormalization name=expanded_conv_project_bn, built=True>
-        24   <BatchNormalization name=expanded_conv_1_project_bn, built=True>
-        33   <Add name=expanded_conv_2_add, built=True>
-        48   <BatchNormalization name=expanded_conv_3_project_bn, built=True>
-        63   <Add name=expanded_conv_4_add, built=True>
-        78   <Add name=expanded_conv_5_add, built=True>
-        92   <BatchNormalization name=expanded_conv_6_project_bn, built=True>
-        107  <Add name=expanded_conv_7_add, built=True>
-        122  <BatchNormalization name=expanded_conv_8_project_bn, built=True>
-        137  <Add name=expanded_conv_9_add, built=True>
-        152  <Add name=expanded_conv_10_add, built=True>
+        20    expanded_conv/project/BatchNorm    <keras.layers.normalization.batch_normalization.BatchNormalization object at 0x7fe9177659f0>
+        29    expanded_conv_1/project/BatchNorm    <keras.layers.normalization.batch_normalization.BatchNormalization object at 0x7fe90c0e1810>
+        38    expanded_conv_2/Add    <keras.layers.merging.add.Add object at 0x7fe9177e9b40>
+        61    expanded_conv_3/project/BatchNorm    <keras.layers.normalization.batch_normalization.BatchNormalization object at 0x7fe90c0c4190>
+        84    expanded_conv_4/Add    <keras.layers.merging.add.Add object at 0x7fe90c1744c0>
+        107    expanded_conv_5/Add    <keras.layers.merging.add.Add object at 0x7fea54abb970>
+        129    expanded_conv_6/project/BatchNorm    <keras.layers.normalization.batch_normalization.BatchNormalization object at 0x7fe900557250>
+        152    expanded_conv_7/Add    <keras.layers.merging.add.Add object at 0x7fe900597c70>
+        175    expanded_conv_8/project/BatchNorm    <keras.layers.normalization.batch_normalization.BatchNormalization object at 0x7fe9005f3760>
+        198    expanded_conv_9/Add    <keras.layers.merging.add.Add object at 0x7fe900457370>
+        221    expanded_conv_10/Add    <keras.layers.merging.add.Add object at 0x7fe9004b6410>
         """
 
         return [
@@ -74,31 +68,34 @@ class PlantUnimodal(Unimodal):
             # self._INPUT_LAYER_IDX,
 
             # first activation
-            3,
+            4,
 
             # inverted residual blocks
-            15, 
-            # 24, 
-            # 33, 
-            # 48, 
-            # 63, 
-            78, 
-            # 92, 
-            # 107, 
-            # 122, 
-            # 137, 
-            152,
+            20, 
+            # 29, 
+            # 38, 
+            # 61, 
+            # 84, 
+            107, 
+            # 129, 
+            # 152, 
+            # 175, 
+            # 198, 
+            221,
+
+            # dense layer
+            229,
 
             # output layer
             self._OUTPUT_LAYER_IDX,
         ]
 
-    def get_layer(self, model, idx) -> keras.Layer:
-        if idx == self._INPUT_LAYER_IDX:
-            return model.layers[0]
-        elif idx == self._OUTPUT_LAYER_IDX:
-            return model.layers[self._OUTPUT_LAYER_IDX]
-        else:
-            layer = keras.layers.GlobalAveragePooling2D()
-            layer(model.layers[idx].output)
-            return layer
+    def get_layer(self, model, idx) -> keras.layers.Layer:
+        layer = model.layers[idx]
+        shape_len = len(layer.output.shape)
+
+        if shape_len > 2:
+            avgpool = keras.layers.GlobalAveragePooling2D() if shape_len > 3 else keras.layers.GlobalAveragePooling1D()
+            avgpool(layer.output)
+            return avgpool
+        return layer

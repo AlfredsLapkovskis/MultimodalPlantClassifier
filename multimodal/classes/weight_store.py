@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-import os
-import json
 import numpy as np
+from common.json_io import JsonIO
 
 
 class WeightStore(ABC):
@@ -22,22 +21,14 @@ class WeightStore(ABC):
 class JsonWeightStore(WeightStore):
 
     def __init__(self, json_path, merge_from_dir=None, pretty=False):
-        self.pretty = pretty
-        self._json_path = json_path
-        self._weights = {}
+        self._json_io = JsonIO(
+            json_path=json_path,
+            merge_from_dir=merge_from_dir,
+            pretty=pretty,
+            backup_enabled=True,
+        )
 
-        if merge_from_dir is not None and os.path.exists(merge_from_dir):
-            for path in os.listdir(merge_from_dir):
-                if path.endswith(".json"):
-                    with open(os.path.join(merge_from_dir, path), "r") as f:
-                        self._weights.update(json.loads(f.read()))
-
-            if json_path is not None and self._weights:
-                self._save_to_json()
-
-        elif os.path.exists(json_path):
-            with open(json_path, "r") as f:
-                self._weights = json.loads(f.read())
+        self._weights = self._json_io.read() or dict()
 
 
     def load_weights(self, model, configuration):
@@ -56,14 +47,7 @@ class JsonWeightStore(WeightStore):
         
             self._weights[key] = [w.tolist() for w in layer.get_weights()]
 
-            self._save_to_json()
-
-
-    def _save_to_json(self):
-        dir = os.path.dirname(self._json_path)
-        os.makedirs(dir, exist_ok=True)
-        with open(self._json_path, "w") as f:
-            f.write(json.dumps(self._weights, indent=2 if self.pretty else None))
+        self._json_io.write(self._weights)
 
 
     def get_name_for_layer(self, layer_idx):
@@ -84,7 +68,3 @@ class JsonWeightStore(WeightStore):
             return size
 
         return f"{layer_idx}_{get_size(layer.input)}_{get_size(layer.output)}_{activation}"
-    
-
-    def __str__(self) -> str:
-        return f"{type(self).__name__}({len(self._weights)} weights)"
