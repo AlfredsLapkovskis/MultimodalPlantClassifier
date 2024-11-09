@@ -25,6 +25,7 @@ class JsonIO:
             json_dict = self._load_from_merge_dir()
             if json_dict:
                 self.write(json_dict)
+                return json_dict
 
         return None
     
