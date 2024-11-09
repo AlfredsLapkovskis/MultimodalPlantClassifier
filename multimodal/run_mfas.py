@@ -111,7 +111,7 @@ def run():
 
     model_builder = DefaultModelBuilder(
         n_classes=N_CLASSES, 
-        fusion_sizes=[64, 64, 64],
+        fusion_sizes=[64, 64, 64, 64],
         weight_store=weight_store,
     )
 
