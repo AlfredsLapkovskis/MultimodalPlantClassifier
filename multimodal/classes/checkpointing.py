@@ -27,7 +27,7 @@ class Checkpoint:
 class Checkpointer(ABC):
     @abstractmethod
     def get_checkpoint(self) -> Checkpoint:
-        return Checkpoint()
+        pass
     @abstractmethod
     def set_checkpoint(self, checkpoint: Checkpoint):
         pass
@@ -35,7 +35,7 @@ class Checkpointer(ABC):
 
 class DummyCheckpointer(Checkpointer):
     def get_checkpoint(self):
-        pass
+        return Checkpoint()
     def set_checkpoint(self, checkpoint: Checkpoint):
         pass
 
