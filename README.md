@@ -63,7 +63,8 @@ Specify there:
 
 - **dataset** directory contains everything related to data:
     - **stats.ipynb** presents some dataset statistics.
-    - **preprocessing.ipynb** contains our PlantCLEF2015 dataset preprocessing pipeline.
+    - **preprocessing.ipynb** contains our pipeline to transform PlantCLEF2015 into Multimodal-PlantCLEF.
+    - **generate_dataset.py** contains a script version of our pipeline to transform PlantCLEF2015 into Multimodal-PlantCLEF. Can be executed with custom parameters. See Section 4.
     - **loading.py** contains methods for loading datasets for our ML models.
     - **plant_net_meta.py** a model of Pl@ntNet metadata.
     - **plant_clef_meta.py** a model of PlantCLEF2015 metadata.
@@ -104,3 +105,38 @@ python -m evaluation.evaluate_model \
     path/to/Fruit/model.keras \
     path/to/Stem/model.keras
 ```
+
+# 4. Generate Multimodal-PlantCLEF
+
+To generate Multimodal-PlantCLEF, please follow instructions in Section 1.1, 1.2 and 1.4. Then use our **generate_dataset.py** script:
+
+```zsh
+python -m dataset.generate_dataset
+```
+
+Optionally, specify custom parameters:
+
+```zsh
+python -m dataset.generate_dataset --help                                                             
+
+
+usage: generate_dataset.py [-h] [--verbose VERBOSE] [--modalities MODALITIES [MODALITIES ...]] [--split_dist SPLIT_DIST [SPLIT_DIST ...]] [--max_solver_iter MAX_SOLVER_ITER] [--seed SEED]
+                           [--plot_splits PLOT_SPLITS] [--dims DIMS [DIMS ...]]
+
+options:
+  -h, --help            show this help message and exit
+  --verbose VERBOSE     Enable additional logging
+  --modalities MODALITIES [MODALITIES ...]
+                        Specify modalities to include into the dataset (Leaf, Flower, Fruit, Stem, Bark, Branch, Scan, ...)
+  --split_dist SPLIT_DIST [SPLIT_DIST ...]
+                        Specify train, validation and test split sizes (fractions in [0, 1])
+  --max_solver_iter MAX_SOLVER_ITER
+                        Limit solver iterations to reduce computational time
+  --seed SEED           Random seed, for reproducibility of results
+  --plot_splits PLOT_SPLITS
+                        Plot data split distributions and save them into `images` directory
+  --dims DIMS [DIMS ...]
+                        Saved image dimensions
+```
+
+This will generate folders with unimodal and multimodal datasets (.tfrecords files), splitted into train, validation and test splits at your **plant_clef_root** location (see Section 1.4). Data instances in the dataset contain "image" and "label" properties. Please refer to **dataset/loading.py** for an example, how to load images and labels. For convenience, there will also be .txt files with labels corresponding to data instances in the datasets.
